@@ -1,4 +1,4 @@
-l
+
 from random import choices
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
@@ -41,24 +41,24 @@ class Currency(models.Model):
         ('FRw','FRw'),
         ('K','K'), 
         ('SR','SR'),
-        ('Ethiopia' ,'Ethiopia' ),
+        ('Br' ,'Br' ),
         
     )
     symbol=models.CharField(max_length=5,choices=CURRENCY_CHOICES)
     NAME_CHOICES =(
-        ('Kenya','Kenya'),
-        ('Uganda','Uganda'),
-        ('Sudan','Sudan'),
-        ('Tanzania','Tanzania'),
-        ('Somalia','Somalia'),
-        ('Madagascar' ,'Madagascar' ),
-        ('Rwanda','Rwanda'),
-        ('Malawi','Malawi'), 
-        ('Seychelles','Seychelles'),
-        ('Br','Br'),
+        ('KenyaShilling','KenyaShilling'),
+        ('UgandaShillings','UgandaShillings'),
+        ('Pound','Pound'),
+        ('TanzaniaShillings','TanzaniaShillings'),
+        ('SomaliaShillings','SomaliaShillings'),
+        ('Malagasy ariary' ,'Malagasy ariary' ),
+        ('Franc','Franc'),
+        ('Kwacha','Kwacha'), 
+        ('Rupees','Rupees'),
+        ('Birr','Birr'),
         
     )
-    name=models.CharField(max_length=15,choices=NAME_CHOICES)
+    name=models.CharField(max_length=30,choices=NAME_CHOICES)
     country=models.CharField(max_length=20)
 
 class Wallet(models.Model):
@@ -78,11 +78,18 @@ class Wallet(models.Model):
     ("retirement","Retirment")
     )
     wallet_type=models.CharField(max_length=15,choices=WALLET_CHOICES)
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.customer.first_name
 
 class Account(models.Model):
     wallet=models.ForeignKey(Wallet,on_delete=models.CASCADE)
-    name_wallet=models.CharField(max_length=20)
+    name_wallet=models.ForeignKey(Customer,on_delete=models.CASCADE,null=True)
     acc_number=models.IntegerField()
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.name_wallet.first_name
 
 
 class Receipt(models.Model):
@@ -94,10 +101,14 @@ class Third_party(models.Model):
     name_thirdparty=models.CharField(max_length=20)
     id_thirdparty=models.CharField(max_length=15)
     email_thirdparty=models.EmailField()
-    phonenumber_thirdparty=models.IntegerField()
+    phonenumber_thirdparty=models.CharField(max_length=20)
     isactive_thiirdparty=models.BooleanField()
     transaction_thirdparty=models.IntegerField()
     currency_thirdparty=models.ForeignKey(Currency,on_delete=models.CASCADE)
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.name_thirdparty
 
 class Transactions(models.Model):
     transaction_code=models.CharField(max_length=20)
@@ -108,18 +119,24 @@ class Transactions(models.Model):
         ("debit","Debit")
     )
     transaction_type=models.CharField(max_length=10,choices=TRANSACTION_CHOICE)
-    transaction_datetime=models.DateTimeField(auto_now_add=True)
+    transaction_datetime=models.DateTimeField(null=True)
     receipt=models.OneToOneField(Receipt,on_delete=models.CASCADE)
-    origin_acc=models.ForeignKey(Customer,on_delete=models.CASCADE)
-    # destination_acc=models.ForeignKey(Customer,on_delete=models.CASCADE)
-    third_party=models.ForeignKey(Third_party,on_delete=models.CASCADE)
+    # origin_acc=models.ForeignKey(Customer,on_delete=models.CASCADE)
+    destination_acc=models.ForeignKey(Customer,on_delete=models.CASCADE)
+    # third_party=models.ForeignKey(Third_party,on_delete=models.CASCADE)
     transaction_cost=models.IntegerField()
     status=ArrayField(models.CharField(max_length=300)) 
     transaction_type=models.CharField(max_length=10)
 
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.transaction_code
+
+
+
 class Card(models.Model):
     date_issed=models.DateField(auto_now_add=True)
-    card_name=models.CharField(max_length=15)
+    card_name=models.CharField(max_length=20)
     card_number=models.IntegerField()
     CARD_CHOICE=(
         ("credit","Credit"),
@@ -136,15 +153,23 @@ class Card(models.Model):
     issuer=models.CharField(max_length=10,choices=ISSUER_CHOICE)
     signature_card=models.ImageField()
 
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.card_name
+
 class Notifications(models.Model):
     id_notification=models.IntegerField()
     name_notification=models.CharField(max_length=15)
     status=ArrayField(
         models.CharField(max_length=10)
     )
-datetime_created=models.DateTimeField(auto_now_add=True)
-message  =models.TextField()
-recipient=models.ForeignKey(Customer,on_delete=models.CASCADE)
+    datetime_created=models.DateTimeField(auto_now_add=True)
+    message  =models.TextField()
+    recipient=models.ForeignKey(Customer,on_delete=models.CASCADE)
+
+    def __str__(self):
+            """Return a string representation of the model."""
+            return self.name_notification
 
 class Loan(models.Model):
     loan_number=models.IntegerField()
@@ -161,7 +186,7 @@ class Loan(models.Model):
     datetime_loan=models.DateTimeField(auto_now_add=True)
     wallet_loan=models.ForeignKey(Wallet,on_delete=models.CASCADE)
     Interest_rate=models.IntegerField()
-    guarantee=models.ForeignKey(Customer,on_delete=models.CASCADE)
+    guarantee=models.ForeignKey(Third_party,on_delete=models.CASCADE)
     payment_due_date=models.DateField()
     loan_balance=models.IntegerField()
     loan_terms=models.TextField()
@@ -170,11 +195,19 @@ class Loan(models.Model):
         models.CharField(max_length=10)
     )
 
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.loan_type
+
 class Reward(models.Model):
     transaction_reward=models.ForeignKey(Transactions,on_delete=models.CASCADE)
     wallet_reward=models.ForeignKey(Wallet,on_delete=models.CASCADE)
     datetime_reward=models.DateTimeField(auto_now_add=True)
     bonus_oints=models.IntegerField()
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.transaction_reward.transaction_code
 
 
 
