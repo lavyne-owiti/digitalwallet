@@ -30,6 +30,12 @@ class Customer(models.Model):
     occupation=models.CharField(max_length=20)
     employed=models.BooleanField()
 
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.first_name
+
+
+
 class Currency(models.Model):
     CURRENCY_CHOICES =(
         ('Ksh','Ksh'),
@@ -61,6 +67,11 @@ class Currency(models.Model):
     name=models.CharField(max_length=30,choices=NAME_CHOICES)
     country=models.CharField(max_length=20)
 
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.name
+
+
 class Wallet(models.Model):
     currency=models.ForeignKey(Currency,on_delete=models.CASCADE)
     customer=models.OneToOneField(Customer,on_delete=models.CASCADE)
@@ -89,12 +100,19 @@ class Account(models.Model):
 
     def __str__(self):
         """Return a string representation of the model."""
-        return self.name_wallet.first_name
+        return self.name_wallet.first_name 
 
 
 class Receipt(models.Model):
     receipt_date=models.DateTimeField(auto_now_add=True)
     receipt_file=models.FileField(upload_to='media/')
+    
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.receipt_date
+
+
+
 
 class Third_party(models.Model):
     account=models.ForeignKey(Account,on_delete=models.CASCADE)
@@ -121,16 +139,17 @@ class Transactions(models.Model):
     transaction_type=models.CharField(max_length=10,choices=TRANSACTION_CHOICE)
     transaction_datetime=models.DateTimeField(null=True)
     receipt=models.OneToOneField(Receipt,on_delete=models.CASCADE)
-    # origin_acc=models.ForeignKey(Customer,on_delete=models.CASCADE)
-    destination_acc=models.ForeignKey(Customer,on_delete=models.CASCADE)
+    origin_acc=models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='origin_acc',null=True)
+    destination_acc=models.ForeignKey(Customer,on_delete=models.CASCADE,related_name='destination_acc')
     # third_party=models.ForeignKey(Third_party,on_delete=models.CASCADE)
     transaction_cost=models.IntegerField()
-    status=ArrayField(models.CharField(max_length=300)) 
+    status=ArrayField(
+        models.CharField(max_length=50,blank=True),size=3) 
     transaction_type=models.CharField(max_length=10)
 
     def __str__(self):
         """Return a string representation of the model."""
-        return self.transaction_code
+        return self.transaction_type
 
 
 
@@ -155,7 +174,7 @@ class Card(models.Model):
 
     def __str__(self):
         """Return a string representation of the model."""
-        return self.card_name
+        return self.issuer
 
 class Notifications(models.Model):
     id_notification=models.IntegerField()
@@ -192,8 +211,8 @@ class Loan(models.Model):
     loan_terms=models.TextField()
     duration=models.IntegerField()
     status=ArrayField(
-        models.CharField(max_length=10)
-    )
+        models.CharField(max_length=50,blank=True),size=3)
+
 
     def __str__(self):
         """Return a string representation of the model."""
