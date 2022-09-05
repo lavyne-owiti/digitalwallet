@@ -104,15 +104,13 @@ class Account(models.Model):
 
 
 class Receipt(models.Model):
+    receipt_name=models.CharField(max_length=20)
     receipt_date=models.DateTimeField(auto_now_add=True)
     receipt_file=models.FileField(upload_to='media/')
     
     def __str__(self):
         """Return a string representation of the model."""
-        return self.receipt_date
-
-
-
+        return self.receipt_name
 
 class Third_party(models.Model):
     account=models.ForeignKey(Account,on_delete=models.CASCADE)
