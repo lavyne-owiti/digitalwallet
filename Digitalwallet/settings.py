@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'wallet'
+    'wallet',
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#path for files to be stored
+MEDIA_ROOT = BASE_DIR / "uploads"
+MEDIA_URL = BASE_DIR = "/image/" #you can define the URL to whatever you want between '/ /'

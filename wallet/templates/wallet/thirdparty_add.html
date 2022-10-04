@@ -7,12 +7,44 @@
     <title>Document</title>
 </head>
 <body>
+    <style>
+        h2{
+            text-align: center;
+            color: blue;
+            font-size: 50px;
+        }
+        label{
+            font-size: 25px;
+        }
+        .form{
+           width: 90%;
+           margin: auto; 
+       }
+       input{
+           width: 100%;
+           padding: 12px 20px;
+           margin: 8px 0;
+           display: inline-block;
+           border: 1px solid #ccc;
+           box-sizing: border-box;
+       }
+       .btn{
+           background-color: blue;
+           border: none;
+           color: white;
+           padding: 10px 88px;
+           text-align: center;
+           text-decoration: none;
+           border-radius: 8px;
+           cursor: pointer; 
+       }
+   </style>
     <h2>Customer Thirdparty</h2>
-    <form method="POST" class="customer form">
+    <form method="POST" class="form">
         <!-- cross site request forgery -->
         {% csrf_token %}
         {{ form.as_p}}
-        <button type="submit" class="submit-btn">Add</button>
+        <button type="submit" class="btn">Add</button>
 
     </form>
 </body>

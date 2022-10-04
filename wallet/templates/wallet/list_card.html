@@ -1,0 +1,17 @@
+<body>
+    <table>
+        <th>
+            <td>Issuer</td>
+            <td> Account name</td>
+            <td>Card type</td>
+        </th>
+        {% for customer in customers %}
+        <tr>
+            <td>{{customer.issuer}}</td>
+            <td>{{customer.card_type}}</td>
+            <td>{{customer.account_card}}</td>
+        </tr>
+        {% endfor%}
+    </table>
+</body>
+

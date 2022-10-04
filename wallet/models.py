@@ -20,13 +20,13 @@ class Customer(models.Model):
     nationallity=models.CharField(max_length=20)
     email=models.EmailField()
     id_number=models.CharField(max_length=20)
-    profile_picture=models.ImageField(upload_to='images/')
+    profile_picture=models.ImageField(upload_to='images/',null=True)
     MARITAL_CHOICES =(
     ("Married", "Married"),
     ("Single", "Single"),
     )
     marital_status=models.CharField(max_length=10, choices=MARITAL_CHOICES)
-    signature=models.ImageField()
+    signature=models.ImageField(null=True)
     occupation=models.CharField(max_length=20)
     employed=models.BooleanField()
 

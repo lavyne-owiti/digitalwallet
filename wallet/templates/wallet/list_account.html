@@ -1,0 +1,16 @@
+<body>
+    <table>
+        <th>
+            <td>Wallet</td>
+            <td>Wallet name</td>
+            <td>Account number</td>
+        </th>
+        {% for customer in customers %}
+        <tr>
+            <td>{{customer.wallet}}</td>
+            <td>{{customer.name_wallet}}</td>
+            <td>{{customer.acc_number}}</td>
+        </tr>
+        {% endfor%}
+    </table>
+</body>
