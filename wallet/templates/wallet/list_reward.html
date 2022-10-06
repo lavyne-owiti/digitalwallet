@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <th>
+            <td>Wallet</td>
+            <td> Transaction </td>
+            <td>Date</td>
+        </th>
+        {% for customer in customers %}
+        <tr>
+            <td>{{customer.wallet_reward}}</td>
+            <td>{{customer.transaction_reward}}</td>
+            <td>{{customer.datetime_reward}}</td>
+        </tr>
+        {% endfor%}
+    </table>
+</body>
+</html>
+

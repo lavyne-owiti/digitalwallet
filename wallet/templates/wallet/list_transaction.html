@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table>
+        <th>
+            <td> Wallet </td>
+            <td>transaction type</td>
+            <td>origin</td>
+            <td>destination</td>
+        </th>
+        {% for customer in customers %}
+        <tr>
+            <td>{{customer. wallet_trans}}</td>
+            <td>{{customer.transaction_type}}</td>
+            <td>{{customer.origin_acc}}</td>
+            <td>{{customer.destination_acc}}</td>
+        </tr>
+        {% endfor%}
+    </table>
+</body>
+</html>
+
+
